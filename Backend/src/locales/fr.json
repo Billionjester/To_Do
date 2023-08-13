@@ -1,0 +1,4 @@
+{
+	"invalidPassword": "Le mot de passe doit comporter au moins 8 caractères et inclure au moins une lettre minuscule, une lettre majuscule, un chiffre et un caractère spécial.",
+	"invalidEmail": "invalidEmail"
+}
