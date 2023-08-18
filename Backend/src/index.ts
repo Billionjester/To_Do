@@ -35,10 +35,7 @@ i18n.configure({
     syncFiles: true,
 });
 
-app.use(cors({
-    origin: 'http://192.168.100.128:4000',
-    credentials: true,
-}));
+app.use(cors());
 app.use(i18n.init);
 
 // Specify absolute paths to SSL certificate and key files
