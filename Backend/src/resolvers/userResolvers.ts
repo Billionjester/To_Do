@@ -5,9 +5,9 @@ import { generateToken } from '../utils/jwtUtils';
 import { UserInput } from '../types/context';
 import { isValidEmail, isValidPassword } from '../utils/common';
 
-const UserResolver = {
+// async (req: Request, res: Response, next: NextFunction) =>
+const resolvers = {
     Query: {
-        // async (req: Request, res: Response, next: NextFunction) =>
         users: async () => {
             try {
                 const users: UserDocument[] = await UserModel.find();
@@ -17,6 +17,7 @@ const UserResolver = {
             }
         },
         user: async (_: any, id: number) => {
+            console.log("id")
             try {
                 const user: UserDocument | null = await UserModel.findById(id);
                 return user;
@@ -24,7 +25,6 @@ const UserResolver = {
                 throw new Error('Failed to fetch user');
             }
         },
-
         login: async (_: any, input: UserInput) => {
             try {
                 const { email, password } = input;
@@ -129,4 +129,4 @@ const UserResolver = {
     },
 };
 
-export default UserResolver;
+export default resolvers;

@@ -14,7 +14,6 @@ const typeDefs = gql`
     }
 
     input TaskInput {
-        userId: String
         title: String
         description: String
         dueDate: Date

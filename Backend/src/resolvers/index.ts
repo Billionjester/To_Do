@@ -5,7 +5,7 @@ import TaskResolver from './taskResolvers';
 // Combine all the resolvers into a single object
 const resolvers = {
     ...UserResolver,
-    // ...TaskResolver,
+    ...TaskResolver,
 };
 
 export default resolvers;
