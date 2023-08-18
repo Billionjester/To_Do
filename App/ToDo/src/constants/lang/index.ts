@@ -1,0 +1,39 @@
+// import LocalizedStrings from 'react-native-localization';
+// import en from './en';
+// import hi from './hi';
+
+
+// let strings = new LocalizedStrings({
+//     en: en,
+//     hi: hi
+
+// });
+// export const changeLaguage = (languageKey: string) => {
+
+//     strings.setLanguage(languageKey);
+// };
+// export default strings;
+
+
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import en from "./en.json";
+import hi from './hi.json';
+
+const resources = {
+    en: {
+        translation: en,
+    },
+    hi: {
+        translation: hi,
+    },
+};
+
+i18n.use(initReactI18next).init({
+    resources,
+    fallbackLng: 'en',
+    compatibilityJSON: 'v3',
+    interpolation: {
+        escapeValue: false
+    }
+});
