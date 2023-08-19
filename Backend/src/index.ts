@@ -20,7 +20,7 @@ const schema = makeExecutableSchema({
     resolvers,
 });
 
-const server = new ApolloServer({ schema });
+const server = new ApolloServer({ schema, introspection: true });
 
 async function startApolloServer() {
     await server.start();
