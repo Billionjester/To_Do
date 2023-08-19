@@ -2,6 +2,11 @@
 import { gql } from 'apollo-server-express';
 
 const typeDefs = gql`
+    enum Role{
+        user
+        admin
+        guest
+    }
     type User {
         age: Int
         id: ID
@@ -21,7 +26,7 @@ const typeDefs = gql`
     }
 
     type Mutation {
-        createUser(name: String, email: String!, password: String!, role: String!, language: String): User
+        createUser(name: String, email: String!, password: String!, role: Role!, language: String): User
         updateUser(id: ID!, name: String, email: String, age: Int): User
         deleteUser(id: ID!): User
         updateLanguage(id: ID!, language: String!): String
