@@ -53,7 +53,7 @@ startApolloServer()
             dbName: process.env.MONGODB_NAME || 'graphql',
         }).then(() => {
             https.createServer(sslOptions, app).listen(PORT, () => {
-                console.log(`Server running on https://192.168.100.227:${PORT}/graphql`);
+                console.log(`Server running on https://localhost:${PORT}/graphql`);
             });
         }).catch((error) => {
             console.error('Error connecting to MongoDB:', error.message);
