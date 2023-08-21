@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import { generateToken } from '../utils/jwtUtils';
 import { UserInput } from '../types/context';
 import { isValidEmail, isValidPassword } from '../utils/common';
+import { GraphQLError } from 'graphql';
 
 // async (req: Request, res: Response, next: NextFunction) =>
 const resolvers = {
@@ -13,16 +14,15 @@ const resolvers = {
                 const users: UserDocument[] = await UserModel.find();
                 return users;
             } catch (error) {
-                throw new Error('Failed to fetch users');
+                throw new GraphQLError('Failed to fetch users');
             }
         },
         user: async (_: any, id: number) => {
-            console.log("id")
             try {
                 const user: UserDocument | null = await UserModel.findById(id);
                 return user;
             } catch (error) {
-                throw new Error('Failed to fetch user');
+                throw new GraphQLError('Failed to fetch user');
             }
         },
         login: async (_: any, input: UserInput) => {
@@ -32,7 +32,7 @@ const resolvers = {
                 const user: UserDocument | null = await UserModel.findOne({ email });
 
                 if (!user || !bcrypt.compareSync(password, user.password)) {
-                    throw new Error('Invalid email or password');
+                    throw new GraphQLError('Invalid email or password');
                 }
 
                 // Generate a JWT token using the utility function
@@ -43,7 +43,7 @@ const resolvers = {
 
                 return { id: user._id, jwtToken, tokenExpiration: 1 };
             } catch (error) {
-                throw new Error('Login failed');
+                throw new GraphQLError('Login failed');
             }
         },
     },
@@ -56,15 +56,17 @@ const resolvers = {
                 language.trim() !== '' && i18n.setLocale(language);
 
                 // Validate email format
-                if (!isValidEmail(email)) throw new Error(__('invalidEmail'));
+                if (!isValidEmail(email)) throw new GraphQLError(__('invalidEmail'), {
+                    extensions: {code: 'BAD_USER_INPUT',}
+                });
 
                 // Validate password
-                if (!isValidPassword(password)) throw new Error(__('invalidPassword'));
+                if (!isValidPassword(password)) throw new GraphQLError(__('invalidPassword'));
 
                 // Check if user with the same email already exists
                 const existingUser = await UserModel.findOne({ email });
                 if (existingUser) {
-                    throw new Error('User with this email already exists');
+                    throw new GraphQLError('User with this email already exists');
                 }
 
                 // Hash the password using bcrypt
@@ -81,7 +83,7 @@ const resolvers = {
                 await newUser.save();
                 return newUser;
             } catch (error: any) {
-                throw new Error(`Failed to create a new user: ${error.message}`);
+                throw new GraphQLError(`Failed to create a new user: ${error.message}`);
             }
         },
         updateUser: async (_: any, input: UserInput) => {
@@ -95,7 +97,7 @@ const resolvers = {
                 );
                 return updatedUser;
             } catch (error) {
-                throw new Error('Failed to update the user');
+                throw new GraphQLError('Failed to update the user');
             }
         },
         deleteUser: async (_: any, id: number) => {
@@ -103,7 +105,7 @@ const resolvers = {
                 const deletedUser: UserDocument | null = await UserModel.findByIdAndRemove(id);
                 return deletedUser;
             } catch (error) {
-                throw new Error('Failed to delete the user');
+                throw new GraphQLError('Failed to delete the user');
             }
         },
         updateLanguage: async (_: any, input: UserInput) => {
@@ -111,7 +113,7 @@ const resolvers = {
                 const { id, language } = input;
 
                 if (!id) {
-                    throw new Error('User not authenticated');
+                    throw new GraphQLError('User not authenticated');
                 }
 
                 const user = await UserModel.findByIdAndUpdate(id, { language }, { new: true });
@@ -119,10 +121,10 @@ const resolvers = {
                     i18n.setLocale(language); // Update the locale for the current request
                     return 'Language updated successfully';
                 } else {
-                    throw new Error('User not found');
+                    throw new GraphQLError('User not found');
                 }
             } catch (error) {
-                throw new Error('Failed to update language');
+                throw new GraphQLError('Failed to update language');
             }
 
         },

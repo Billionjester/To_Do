@@ -2,6 +2,7 @@
 import bcrypt from 'bcrypt';
 import { UserModel, TaskModel, UserDocument, TaskDocument } from '../models';
 import { TaskInput } from '../types/context';
+import { GraphQLError } from 'graphql';
 
 // (parent, args, contextValue, info)
 const resolvers = {
@@ -12,7 +13,7 @@ const resolvers = {
                 const tasks: TaskDocument[] = await TaskModel.find({ userId });
                 return tasks;
             } catch (error) {
-                throw new Error('Failed to fetch tasks');
+                throw new GraphQLError('Failed to fetch tasks');
             }
         },
         task: async (_: any, { id }: { id: string }) => {
@@ -20,7 +21,7 @@ const resolvers = {
                 const task: TaskDocument | null = await TaskModel.findById(id);
                 return task;
             } catch (error) {
-                throw new Error('Failed to fetch task');
+                throw new GraphQLError('Failed to fetch task');
             }
         },
     },
@@ -32,7 +33,7 @@ const resolvers = {
                 await newTask.save();
                 return newTask;
             } catch (error) {
-                throw new Error('Failed to create a new task');
+                throw new GraphQLError('Failed to create a new task');
             }
         },
         updateTask: async (_: any, { id, input }: { id: string; input: TaskInput }) => {
@@ -44,7 +45,7 @@ const resolvers = {
                 );
                 return updatedTask;
             } catch (error) {
-                throw new Error('Failed to update the task');
+                throw new GraphQLError('Failed to update the task');
             }
         },
         deleteTask: async (_: any, { id }: { id: string }) => {
@@ -52,7 +53,7 @@ const resolvers = {
                 const deletedTask: TaskDocument | null = await TaskModel.findByIdAndRemove(id);
                 return deletedTask;
             } catch (error) {
-                throw new Error('Failed to delete the task');
+                throw new GraphQLError('Failed to delete the task');
             }
         },
     },
