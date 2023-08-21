@@ -57,7 +57,16 @@ const resolvers = {
 
                 // Validate email format
                 if (!isValidEmail(email)) throw new GraphQLError(__('invalidEmail'), {
-                    extensions: { code: 'BAD_USER_INPUT', }
+                    extensions: {
+                        code: 'BAD_USER_INPUT',
+                        http: {
+                            status: 404,
+                            headers: new Map([
+                                ['some-header', 'it was bad'],
+                                ['another-header', 'seriously'],
+                            ]),
+                        },
+                    }
                 });
 
                 // Validate password
