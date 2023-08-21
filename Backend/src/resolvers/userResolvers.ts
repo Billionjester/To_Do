@@ -41,7 +41,7 @@ const resolvers = {
                 user.jwtToken = jwtToken;
                 await user.save();
 
-                return { id: user._id, jwtToken, tokenExpiration: 1 };
+                return { id: user._id, jwtToken, tokenExpiration: 1, name: user.name };
             } catch (error) {
                 throw new GraphQLError('Login failed');
             }
@@ -57,7 +57,7 @@ const resolvers = {
 
                 // Validate email format
                 if (!isValidEmail(email)) throw new GraphQLError(__('invalidEmail'), {
-                    extensions: {code: 'BAD_USER_INPUT',}
+                    extensions: { code: 'BAD_USER_INPUT', }
                 });
 
                 // Validate password
