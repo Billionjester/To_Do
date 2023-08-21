@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import { UserModel, TaskModel, UserDocument, TaskDocument } from '../models';
 import { TaskInput } from '../types/context';
 import { GraphQLError } from 'graphql';
+import mongoose from 'mongoose';
 
 // (parent, args, contextValue, info)
 const resolvers = {
@@ -10,7 +11,8 @@ const resolvers = {
         tasks: async (_: any, { userId }: { userId: string }) => {
             try {
                 // Fetch tasks based on the userId
-                const tasks: TaskDocument[] = await TaskModel.find({ userId });
+                const userIdObjectId = new mongoose.Types.ObjectId(userId);
+                const tasks: TaskDocument[] = await TaskModel.find({ userId: userIdObjectId });
                 return tasks;
             } catch (error) {
                 throw new GraphQLError('Failed to fetch tasks');
