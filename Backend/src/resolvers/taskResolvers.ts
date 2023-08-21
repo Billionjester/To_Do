@@ -26,7 +26,7 @@ const resolvers = {
         },
     },
     Mutation: {
-        createTask: async (_: any, { input }: { input: TaskInput }, { userId }: { userId: string }) => {
+        createTask: async (_: any, { input, userId }: { input: TaskInput, userId: string }) => {
             try {
                 // Create a new task associated with the userId
                 const newTask: TaskDocument = new TaskModel({ ...input, userId });
