@@ -41,7 +41,7 @@ const resolvers = {
                 user.jwtToken = jwtToken;
                 await user.save();
 
-                return { userId: user._id, jwtToken, tokenExpiration: 1 };
+                return { id: user._id, jwtToken, tokenExpiration: 1 };
             } catch (error) {
                 throw new Error('Login failed');
             }
